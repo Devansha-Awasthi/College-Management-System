@@ -7,6 +7,7 @@ from Alumni import alumni_menu
 
 FILE = "data/students.json"
 
+
 def load_data():
     try:
         with open(FILE, "r") as f:
@@ -14,9 +15,11 @@ def load_data():
     except:
         return []
 
+
 def save_data(data):
     with open(FILE, "w") as f:
         json.dump(data, f, indent=4)
+
 
 def add_student():
     students = load_data()
@@ -26,6 +29,7 @@ def add_student():
     students.append({"ID": sid, "Name": name, "Course": course})
     save_data(students)
     print("Student Added Successfully")
+
 
 def view_students():
     students = load_data()
@@ -43,12 +47,15 @@ if __name__ == "__main__":
         print("5. Alumni Section")
         print("6. Exit")
 
-try:
-    choice = int(input("Enter your choice: "))
-except EOFError:
-    print("No input detected. Running default option...")
-    choice = 6   # Exit or any default option
-    
+        try:
+            choice = int(input("Enter your choice: "))
+        except EOFError:
+            print("No input detected. Running default option...")
+            choice = 6
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
+
         if choice == 1:
             student_menu()
         elif choice == 2:
