@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Management System</title>
+    <meta name="theme-color" content="#2563eb">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>📚 College Management System</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#students" class="nav-link">Students</a></li>
+                <li><a href="#faculty" class="nav-link">Faculty</a></li>
+                <li><a href="#courses" class="nav-link">Courses</a></li>
+                <li><a href="#fees" class="nav-link">Fees</a></li>
+                <li id="authArea"><a href="#" class="nav-link" id="loginLink" onclick="openModal('loginModal')">Log In</a> | <a href="#" class="nav-link" id="signupLink" onclick="openModal('signupModal')">Sign Up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2>Welcome to College Management System</h2>
+            <p>Manage students, faculty, courses, and fees all in one place</p>
+            <button class="btn btn-primary" onclick="scrollToSection('students')">Get Started</button>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Statistics Dashboard -->
+        <section class="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👨‍🎓</div>
+                    <h3>Total Students</h3>
+                    <p class="stat-number" id="totalStudents">0</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👨‍🏫</div>
+                    <h3>Total Faculty</h3>
+                    <p class="stat-number" id="totalFaculty">0</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📖</div>
+                    <h3>Total Courses</h3>
+                    <p class="stat-number" id="totalCourses">0</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <h3>Total Fees</h3>
+                    <p class="stat-number" id="totalFees">₹0</p>
+                </div>
+            </div>
+            <!-- Charts -->
+            <div class="charts-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin-top:1.5rem;">
+                <div class="chart-card" style="background:transparent; padding:1rem;">
+                    <h4 style="margin-bottom:.6rem; color:#374151;">Students by Course</h4>
+                    <canvas id="studentsByCourseChart" aria-label="Students by course chart"></canvas>
+                </div>
+                <div class="chart-card" style="background:transparent; padding:1rem;">
+                    <h4 style="margin-bottom:.6rem; color:#374151;">Fees Status (Paid vs Pending)</h4>
+                    <canvas id="feesStatusChart" aria-label="Fees status chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Student Management Section -->
+        <section id="students" class="module-section">
+            <h2>Student Management</h2>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="card-icon">➕</div>
+                    <h3>Add Student</h3>
+                    <p>Register a new student with complete information</p>
+                    <button class="btn btn-secondary" onclick="openModal('addStudentModal')">Add</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">👁️</div>
+                    <h3>View Students</h3>
+                    <p>View all registered students and their details</p>
+                    <button class="btn btn-secondary" onclick="openModal('viewStudentsModal'); loadStudents()">View</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">🔍</div>
+                    <h3>Search Student</h3>
+                    <p>Find a specific student by ID or name</p>
+                    <button class="btn btn-secondary" onclick="openModal('searchStudentModal')">Search</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">✏️</div>
+                    <h3>Update Student</h3>
+                    <p>Modify student information</p>
+                    <button class="btn btn-secondary" onclick="openModal('updateStudentModal')">Update</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Faculty Management Section -->
+        <section id="faculty" class="module-section">
+            <h2>Faculty Management</h2>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="card-icon">➕</div>
+                    <h3>Add Faculty</h3>
+                    <p>Register a new faculty member</p>
+                    <button class="btn btn-secondary" onclick="openModal('addFacultyModal')">Add</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">👁️</div>
+                    <h3>View Faculty</h3>
+                    <p>View all faculty members and their details</p>
+                    <button class="btn btn-secondary" onclick="openModal('viewFacultyModal'); loadFaculty()">View</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">🔍</div>
+                    <h3>Search Faculty</h3>
+                    <p>Find a specific faculty member</p>
+                    <button class="btn btn-secondary" onclick="openModal('searchFacultyModal')">Search</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">✏️</div>
+                    <h3>Update Faculty</h3>
+                    <p>Modify faculty information</p>
+                    <button class="btn btn-secondary" onclick="openModal('updateFacultyModal')">Update</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Management Section -->
+        <section id="courses" class="module-section">
+            <h2>Course Management</h2>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="card-icon">➕</div>
+                    <h3>Add Course</h3>
+                    <p>Create a new course</p>
+                    <button class="btn btn-secondary" onclick="openModal('addCourseModal')">Add</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">👁️</div>
+                    <h3>View Courses</h3>
+                    <p>View all available courses</p>
+                    <button class="btn btn-secondary" onclick="openModal('viewCoursesModal'); loadCourses()">View</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">👨‍🏫</div>
+                    <h3>Assign Faculty</h3>
+                    <p>Assign faculty to courses</p>
+                    <button class="btn btn-secondary" onclick="openModal('assignFacultyModal')">Assign</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Course Details</h3>
+                    <p>View detailed course information</p>
+                    <button class="btn btn-secondary" onclick="openModal('courseDetailsModal'); loadCourses()">Details</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fees Management Section -->
+        <section id="fees" class="module-section">
+            <h2>Fees & Reports</h2>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="card-icon">➕</div>
+                    <h3>Add Fee Payment</h3>
+                    <p>Record a new fee payment</p>
+                    <button class="btn btn-secondary" onclick="openModal('addFeeModal')">Add</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">👁️</div>
+                    <h3>View All Fees</h3>
+                    <p>View all fee payments and records</p>
+                    <button class="btn btn-secondary" onclick="openModal('viewFeesModal'); loadFees()">View</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">⏳</div>
+                    <h3>Pending Fees</h3>
+                    <p>View students with pending fee payments</p>
+                    <button class="btn btn-secondary" onclick="openModal('pendingFeesModal'); loadPendingFees()">Pending</button>
+                </div>
+                <div class="module-card">
+                    <div class="card-icon">📈</div>
+                    <h3>Fee Reports</h3>
+                    <p>Generate fee reports and statistics</p>
+                    <button class="btn btn-secondary" onclick="openModal('feeReportsModal'); generateReports()">Reports</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ MODALS ============ -->
+
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addStudentModal')">&times;</span>
+            <h2>Add New Student</h2>
+            <form onsubmit="addStudent(event)">
+                <input type="text" placeholder="Student ID" id="studentId" required>
+                <input type="text" placeholder="Student Name" id="studentName" required>
+                <input type="text" placeholder="Course" id="studentCourse" required>
+                <input type="email" placeholder="Email" id="studentEmail" required>
+                <input type="tel" placeholder="Phone" id="studentPhone" required>
+                <button type="submit" class="btn btn-primary">Add Student</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Students Modal -->
+    <div id="viewStudentsModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('viewStudentsModal')">&times;</span>
+            <h2>Student List</h2>
+            <div id="studentsList" class="records-list"></div>
+        </div>
+    </div>
+
+    <!-- Search Student Modal -->
+    <div id="searchStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('searchStudentModal')">&times;</span>
+            <h2>Search Student</h2>
+            <form onsubmit="searchStudent(event)">
+                <input type="text" placeholder="Enter Student ID" id="searchStudentId" required>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <div id="searchStudentResult" class="search-result"></div>
+        </div>
+    </div>
+
+    <!-- Update Student Modal -->
+    <div id="updateStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('updateStudentModal')">&times;</span>
+            <h2>Update Student</h2>
+            <form onsubmit="updateStudent(event)">
+                <input type="text" placeholder="Student ID to Update" id="updateStudentId" required>
+                <input type="text" placeholder="New Name (optional)" id="updateStudentName">
+                <input type="text" placeholder="New Course (optional)" id="updateStudentCourse">
+                <input type="email" placeholder="New Email (optional)" id="updateStudentEmail">
+                <input type="tel" placeholder="New Phone (optional)" id="updateStudentPhone">
+                <button type="submit" class="btn btn-primary">Update Student</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Faculty Modal -->
+    <div id="addFacultyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addFacultyModal')">&times;</span>
+            <h2>Add New Faculty</h2>
+            <form onsubmit="addFaculty(event)">
+                <input type="text" placeholder="Faculty ID" id="facultyId" required>
+                <input type="text" placeholder="Faculty Name" id="facultyName" required>
+                <input type="text" placeholder="Department" id="facultyDept" required>
+                <input type="text" placeholder="Designation" id="facultyDesig" required>
+                <input type="tel" placeholder="Phone" id="facultyPhone" required>
+                <button type="submit" class="btn btn-primary">Add Faculty</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Faculty Modal -->
+    <div id="viewFacultyModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('viewFacultyModal')">&times;</span>
+            <h2>Faculty List</h2>
+            <div id="facultyList" class="records-list"></div>
+        </div>
+    </div>
+
+    <!-- Search Faculty Modal -->
+    <div id="searchFacultyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('searchFacultyModal')">&times;</span>
+            <h2>Search Faculty</h2>
+            <form onsubmit="searchFaculty(event)">
+                <input type="text" placeholder="Enter Faculty ID" id="searchFacultyId" required>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <div id="searchFacultyResult" class="search-result"></div>
+        </div>
+    </div>
+
+    <!-- Update Faculty Modal -->
+    <div id="updateFacultyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('updateFacultyModal')">&times;</span>
+            <h2>Update Faculty</h2>
+            <form onsubmit="updateFaculty(event)">
+                <input type="text" placeholder="Faculty ID to Update" id="updateFacultyId" required>
+                <input type="text" placeholder="New Name (optional)" id="updateFacultyName">
+                <input type="text" placeholder="New Department (optional)" id="updateFacultyDept">
+                <input type="text" placeholder="New Designation (optional)" id="updateFacultyDesig">
+                <input type="tel" placeholder="New Phone (optional)" id="updateFacultyPhone">
+                <button type="submit" class="btn btn-primary">Update Faculty</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Course Modal -->
+    <div id="addCourseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addCourseModal')">&times;</span>
+            <h2>Add New Course</h2>
+            <form onsubmit="addCourse(event)">
+                <input type="text" placeholder="Course ID" id="courseId" required>
+                <input type="text" placeholder="Course Name" id="courseName" required>
+                <input type="text" placeholder="Faculty Name" id="courseFaculty" required>
+                <button type="submit" class="btn btn-primary">Add Course</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Courses Modal -->
+    <div id="viewCoursesModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('viewCoursesModal')">&times;</span>
+            <h2>Course List</h2>
+            <div id="coursesList" class="records-list"></div>
+        </div>
+    </div>
+
+    <!-- Assign Faculty Modal -->
+    <div id="assignFacultyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('assignFacultyModal')">&times;</span>
+            <h2>Assign Faculty to Course</h2>
+            <form onsubmit="assignFaculty(event)">
+                <input type="text" placeholder="Course ID" id="assignCourseId" required>
+                <input type="text" placeholder="Faculty Name" id="assignFacultyName" required>
+                <button type="submit" class="btn btn-primary">Assign</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Course Details Modal -->
+    <div id="courseDetailsModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('courseDetailsModal')">&times;</span>
+            <h2>Course Details</h2>
+            <div id="courseDetails" class="records-list"></div>
+        </div>
+    </div>
+
+    <!-- Add Fee Modal -->
+    <div id="addFeeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addFeeModal')">&times;</span>
+            <h2>Add Fee Payment</h2>
+            <form onsubmit="addFee(event)">
+                <input type="text" placeholder="Student ID" id="feeStudentId" required>
+                <input type="number" placeholder="Amount" id="feeAmount" step="0.01" required>
+                <select id="feeStatus" required>
+                    <option value="">Select Status</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Pending">Pending</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Add Fee</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Fees Modal -->
+    <div id="viewFeesModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('viewFeesModal')">&times;</span>
+            <h2>Fee Records</h2>
+            <div id="feesList" class="records-list"></div>
+        </div>
+    </div>
+
+    <!-- Pending Fees Modal -->
+    <div id="pendingFeesModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('pendingFeesModal')">&times;</span>
+            <h2>Pending Fee Payments</h2>
+            <div id="pendingFeesList" class="records-list"></div>
+        </div>
+    </div>
+
+    <!-- Fee Reports Modal -->
+    <div id="feeReportsModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('feeReportsModal')">&times;</span>
+            <h2>Fee Reports</h2>
+            <div id="feeReports" class="records-list"></div>
+        </div>
+    </div>
+
+    <!-- Authentication Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Log In</h2>
+            <form onsubmit="login(event)">
+                <input type="email" placeholder="Email" id="loginEmail" required>
+                <input type="password" placeholder="Password" id="loginPassword" required>
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </form>
+            <p style="margin-top:1rem;">Don't have an account? <a href="#" onclick="closeModal('loginModal'); openModal('signupModal')">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Sign Up</h2>
+            <form onsubmit="signup(event)">
+                <input type="email" placeholder="Email" id="signupEmail" required>
+                <input type="password" placeholder="Password" id="signupPassword" required>
+                <input type="password" placeholder="Confirm Password" id="signupConfirmPassword" required>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+            <p style="margin-top:1rem;">Already have an account? <a href="#" onclick="closeModal('signupModal'); openModal('loginModal')">Log In</a></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 College Management System. Created by Divyansh Singh. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a> | 
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+

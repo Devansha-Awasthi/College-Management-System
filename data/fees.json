@@ -1,0 +1,12 @@
+[
+    {
+        "StudentID": "101",
+        "Amount": 100000.0,
+        "Status": "paid"
+    },
+    {
+        "StudentID": "101",
+        "Amount": 40000.0,
+        "Status": "Paid"
+    }
+]
