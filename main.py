@@ -43,7 +43,7 @@ if __name__ == "__main__":
         print("5. Alumni Section")
         print("6. Exit")
 
-   try:
+try:
     choice = int(input("Enter your choice: "))
 except EOFError:
     print("No input detected. Running default option...")
