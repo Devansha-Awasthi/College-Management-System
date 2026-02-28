@@ -43,8 +43,12 @@ if __name__ == "__main__":
         print("5. Alumni Section")
         print("6. Exit")
 
-        choice = int(input("Enter your choice: "))
-
+   try:
+    choice = int(input("Enter your choice: "))
+except EOFError:
+    print("No input detected. Running default option...")
+    choice = 6   # Exit or any default option
+    
         if choice == 1:
             student_menu()
         elif choice == 2:
