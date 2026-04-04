@@ -8,7 +8,6 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: cms-data-pv
-  namespace: college-management
 spec:
   capacity:
     storage: 1Gi
@@ -37,16 +36,8 @@ kind: Deployment
 metadata:
   name: college-management-system
   namespace: college-management
-  labels:
-    app: cms
-    version: v1
 spec:
   replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   selector:
     matchLabels:
       app: cms
@@ -54,56 +45,19 @@ spec:
     metadata:
       labels:
         app: cms
-        version: v1
     spec:
       containers:
       - name: college-management
-        image: college-management-system:latest
-        imagePullPolicy: Always
+        image: devansha2003/college-management   # ✅ FIXED
         ports:
-        - containerPort: 8080
-          name: http
-          protocol: TCP
-        env:
-        - name: FLASK_ENV
-          value: "production"
-        - name: DATA_PATH
-          value: "/data"
+        - containerPort: 3000                   # ✅ FIXED
         volumeMounts:
         - name: data-storage
           mountPath: /data
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 2
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
-          runAsNonRoot: false
       volumes:
       - name: data-storage
         persistentVolumeClaim:
           claimName: cms-data-pvc
-      restartPolicy: Always
 
 ---
 apiVersion: v1
@@ -111,41 +65,11 @@ kind: Service
 metadata:
   name: cms-service
   namespace: college-management
-  labels:
-    app: cms
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 8080
-    protocol: TCP
-    name: http
+  type: NodePort                             # ✅ FIXED
   selector:
     app: cms
-
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: cms-hpa
-  namespace: college-management
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: college-management-system
-  minReplicas: 2
-  maxReplicas: 5
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
+  ports:
+  - port: 80
+    targetPort: 3000                         # ✅ FIXED
+    nodePort: 30007
