@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: college-management
-          image: devansha2003/college_manangement
+          image: devansha2003/college-manangement
           ports:
             - containerPort: 3000
 
