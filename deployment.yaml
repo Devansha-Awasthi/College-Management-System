@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: college_manangement
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: college_manangement
+  template:
+    metadata:
+      labels:
+        app: college_manangement
+    spec:
+      containers:
+        - name: college_manangement
+          image: rajatrai2005/college_manangement
+          ports:
+            - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: college_manangement
+spec:
+  type: NodePort
+  selector:
+    app: college_manangement
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30007
