@@ -28,7 +28,18 @@ body {
     background: radial-gradient(1200px 600px at -10% 10%, rgba(37,99,235,0.06), transparent), radial-gradient(800px 400px at 110% 90%, rgba(30,64,175,0.04), transparent), #f8fafc;
     -webkit-font-smoothing:antialiased;
 }
+/* This forces the containers to a fixed size regardless of what Chart.js tries to do */
+.chart-container {
+    position: relative;
+    height: 300px !important; 
+    width: 100% !important;
+    overflow: hidden; /* Prevents chart "overflow" from stretching the page */
+}
 
+canvas {
+    max-height: 100% !important;
+    max-width: 100% !important;
+}
 .container {
     max-width: 1200px;
     margin: 0 auto;
